@@ -79,4 +79,60 @@ How It Helps for the Future
 Cost Reduction: Personalized healthcare approaches will reduce overall healthcare costs by minimizing inefficiencies in treatment and reducing the number of ineffective or harmful therapies.
 Wider Accessibility: As genetic testing becomes more affordable, personalized healthcare can become more accessible to a larger population, enabling precision medicine at scale.
 Scalable Precision Medicine: The approach can scale beyond individual treatments to incorporate preventative strategies, leveraging genetic information to forecast and mitigate future health risks.
+pip install pandas numpy scikit-learn matplotlib seaborn flask
+#Code
+import pandas as pd
+
+# Load genetic and health data
+genetic_data = pd.read_csv('genetic_data.csv')
+health_data = pd.read_csv('health_data.csv')
+
+# Merge datasets on a common key (e.g., patient ID)
+merged_data = pd.merge(genetic_data, health_data, on='patient_id')
+
+# Data cleaning and preprocessing
+# Handle missing values
+merged_data.fillna(method='ffill', inplace=True)
+
+# Normalize data if necessary
+# Example: merged_data['age'] = (merged_data['age'] - merged_data['age'].mean()) / merged_data['age'].std()
+# Select relevant features
+features = merged_data[['gene1', 'gene2', 'age', 'lifestyle']]
+target = merged_data['health_outcome']
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+
+# Train model
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Make predictions
+predictions = model.predict(X_test)
+
+# Evaluate model
+accuracy = accuracy_score(y_test, predictions)
+print(f'Model Accuracy: {accuracy:.2f}')
+from sklearn.metrics import classification_report
+
+# Print classification report
+print(classification_report(y_test, predictions))
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json(force=True)
+    input_features = pd.DataFrame(data, index=[0])
+    prediction = model.predict(input_features)
+    return jsonify({'prediction': prediction[0]})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    python app.py
+    curl -X POST -H "Content-Type: application/json" -d '{"gene1": value1, "gene2": value2, "age": value3, "lifestyle": value4}' http://localhost:5000/predict
 
