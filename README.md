@@ -1,7 +1,6 @@
 # Project-idea
 Idea : AI for Enhancing Personalized Healthcare Recommendations Based on Genetics
-NAME- NIKITA NAYAK
-ROLL NO-23051434
+
 
 Problem Definition
 In the traditional healthcare system, treatments and recommendations are largely based on a "one-size-fits-all" approach. For example, standard guidelines are used to prescribe medications, suggest lifestyle changes, or determine the course of treatment. However, this approach fails to account for the fact that each person’s genetics, medical history, and lifestyle can greatly influence how they respond to a particular treatment or intervention.
